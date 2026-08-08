@@ -1,574 +1,1045 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lomas del Encuentro — Framework de Alianza Estratégica (Rev. 2/3)</title>
-<style>
-  :root{
-    --verde:#1e5c48; --verde-osc:#123c2f; --verde-claro:#e8f2ee;
-    --oro:#c9a227; --crema:#faf8f3; --tinta:#22302b; --gris:#6b7a74;
-    --rojo:#a83232; --azul:#2c4a6e;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--crema);color:var(--tinta);line-height:1.6}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APATHEIA | Growth Partner — Orlando Suárez</title>
+    <meta name="description" content="Análisis estratégico para decisiones de negocio. Investigación sectorial, inteligencia de negocios e informes técnicos.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --charcoal: #1a1a1a;
+            --graphite: #2d2d2d;
+            --stone: #4a4a4a;
+            --slate: #6b6b6b;
+            --silver: #9a9a9a;
+            --pearl: #c4c4c4;
+            --mist: #e8e8e8;
+            --cloud: #f5f5f5;
+            --white: #ffffff;
+            --accent: #0a0a0a;
+        }
 
-  /* ---------- Barra de progreso ---------- */
-  #progreso{position:fixed;top:0;left:0;height:4px;background:var(--oro);width:0%;z-index:100;transition:width .1s}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  /* ---------- Sidebar ---------- */
-  nav{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--verde-osc);color:#dfeee8;
-      padding:24px 0;overflow-y:auto;z-index:50}
-  nav .marca{padding:0 20px 18px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:14px}
-  nav .marca h2{font-size:15px;letter-spacing:.5px;color:#fff}
-  nav .marca small{color:var(--oro);font-size:11px;text-transform:uppercase;letter-spacing:1px}
-  nav a{display:block;padding:9px 20px;color:#cfe3db;text-decoration:none;font-size:13.5px;
-        border-left:3px solid transparent;transition:.2s}
-  nav a:hover{background:rgba(255,255,255,.07);color:#fff}
-  nav a.activo{border-left-color:var(--oro);background:rgba(201,162,39,.12);color:#fff;font-weight:600}
-  nav .rev{margin:16px 20px;padding:10px 12px;background:rgba(201,162,39,.15);border:1px solid var(--oro);
-           border-radius:8px;font-size:12px;color:#f3e9c9}
+        html {
+            scroll-behavior: smooth;
+        }
 
-  main{margin-left:260px;padding:0 0 80px}
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--charcoal);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-  /* ---------- Hero ---------- */
-  header.hero{background:linear-gradient(135deg,var(--verde-osc),var(--verde) 60%,#2e7a5f);
-              color:#fff;padding:90px 60px 70px;position:relative;overflow:hidden}
-  header.hero::after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;
-              border-radius:50%;background:radial-gradient(circle,rgba(201,162,39,.25),transparent 70%)}
-  .hero .kicker{text-transform:uppercase;letter-spacing:3px;font-size:12px;color:var(--oro);font-weight:700}
-  .hero h1{font-size:42px;margin:12px 0 6px;font-weight:800}
-  .hero h3{font-size:20px;font-weight:400;color:#cfe3db;margin-bottom:26px}
-  .hero .chips{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
-  .chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:8px 16px;
-        border-radius:999px;font-size:13px}
-  .chip b{color:var(--oro)}
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--mist);
+            transition: all 0.3s ease;
+        }
 
-  section{padding:64px 60px;max-width:1050px}
-  section h2{font-size:28px;color:var(--verde-osc);border-bottom:3px solid var(--oro);
-             display:inline-block;padding-bottom:6px;margin-bottom:26px}
-  section .sub{color:var(--gris);margin-bottom:26px;font-size:15px}
-  h4{color:var(--verde);margin:22px 0 10px;font-size:17px}
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:18px 0}
-  .card{background:#fff;border:1px solid #e4e0d5;border-radius:12px;padding:20px;
-        box-shadow:0 2px 6px rgba(0,0,0,.04);transition:.2s}
-  .card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(18,60,47,.12)}
-  .card .num{font-size:26px;font-weight:800;color:var(--verde)}
-  .card .lbl{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gris)}
-  .card p{font-size:13.5px;margin-top:6px;color:var(--tinta)}
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--black);
+        }
 
-  table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;
-        box-shadow:0 2px 8px rgba(0,0,0,.06);margin:16px 0;font-size:14px}
-  th{background:var(--verde-osc);color:#fff;padding:12px 14px;text-align:left;font-size:13px;
-     text-transform:uppercase;letter-spacing:.5px}
-  td{padding:11px 14px;border-bottom:1px solid #eee}
-  tr:last-child td{border-bottom:none}
-  tr.destacado{background:var(--verde-claro);font-weight:700}
+        .logo-text span {
+            font-weight: 400;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: block;
+            color: var(--slate);
+            margin-top: -4px;
+        }
 
-  /* ---------- Diagrama Escrow ---------- */
-  .flujo{display:flex;flex-direction:column;align-items:center;gap:0;margin:26px 0}
-  .flujo .paso{background:#fff;border:2px solid var(--verde);border-radius:12px;padding:16px 28px;
-               text-align:center;min-width:340px;box-shadow:0 3px 8px rgba(0,0,0,.08);position:relative}
-  .flujo .paso b{color:var(--verde-osc)}
-  .flujo .paso small{display:block;color:var(--gris)}
-  .flujo .flecha{font-size:26px;color:var(--oro);padding:6px 0;font-weight:800}
-  .flujo .paso.clave{border-color:var(--oro);background:#fdf7e4}
-  .regla-oro{background:var(--verde-osc);color:#fff;padding:14px 22px;border-radius:10px;
-             margin-top:20px;font-size:15px;border-left:6px solid var(--oro)}
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
 
-  /* ---------- Tabs escenarios ---------- */
-  .tabs{display:flex;gap:8px;margin:20px 0 0}
-  .tab-btn{padding:10px 22px;border:2px solid var(--verde);background:#fff;color:var(--verde);
-           border-radius:8px 8px 0 0;cursor:pointer;font-weight:700;font-size:14px;transition:.2s}
-  .tab-btn.on{background:var(--verde);color:#fff}
-  .tab-panel{display:none;background:#fff;border:2px solid var(--verde);border-radius:0 10px 10px 10px;
-             padding:26px;animation:fade .3s}
-  .tab-panel.on{display:block}
-  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-  .tab-panel .gran{font-size:32px;font-weight:800;color:var(--verde)}
+        .nav-links a {
+            text-decoration: none;
+            color: var(--stone);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
 
-  /* ---------- Barras CSS ---------- */
-  .barra-wrap{margin:8px 0}
-  .barra-lbl{font-size:13px;color:var(--gris);display:flex;justify-content:space-between}
-  .barra{height:22px;background:#e8e4d8;border-radius:6px;overflow:hidden;margin-top:3px}
-  .barra i{display:block;height:100%;background:linear-gradient(90deg,var(--verde),#3d8a6e);
-           border-radius:6px;width:0;transition:width 1.2s ease}
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--black);
+            transition: width 0.3s;
+        }
 
-  /* ---------- Acordeón objeciones ---------- */
-  .obj{background:#fff;border:1px solid #e4e0d5;border-radius:12px;margin-bottom:14px;overflow:hidden}
-  .obj-head{padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
-            font-weight:700;color:var(--verde-osc);background:var(--verde-claro)}
-  .obj-head:hover{background:#dcebe4}
-  .obj-head .ico{transition:.3s;color:var(--oro);font-size:20px}
-  .obj.abierta .ico{transform:rotate(180deg)}
-  .obj-body{max-height:0;overflow:hidden;transition:max-height .4s ease;padding:0 22px}
-  .obj.abierta .obj-body{max-height:900px;padding:18px 22px}
-  .obj-body p{font-size:14.5px;color:var(--tinta)}
+        .nav-links a:hover {
+            color: var(--black);
+        }
 
-  /* ---------- Timeline ---------- */
-  .timeline{position:relative;margin:30px 0;padding-left:36px}
-  .timeline::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--oro)}
-  .tl-item{position:relative;margin-bottom:26px;background:#fff;border-radius:12px;padding:18px 22px;
-           border:1px solid #e4e0d5}
-  .tl-item::before{content:"";position:absolute;left:-33px;top:22px;width:15px;height:15px;border-radius:50%;
-                   background:var(--verde);border:3px solid var(--oro)}
-  .tl-item .fase{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--oro);font-weight:800}
-  .tl-item h4{margin:4px 0 8px}
-  .tl-item ul{margin-left:18px;font-size:14px;color:var(--tinta)}
+        .nav-links a:hover::after {
+            width: 100%;
+        }
 
-  /* ---------- Matriz de riesgos ---------- */
-  .prob-Alta{background:#fdecea;color:var(--rojo);font-weight:700}
-  .prob-Media{background:#fdf4e3;color:#b07818;font-weight:700}
-  .imp{font-weight:700}
-  .imp-MuyAlto{color:var(--rojo)} .imp-Alto{color:#c05621} .imp-Medio{color:#b07818}
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
 
-  /* ---------- Comparativa toggle ---------- */
-  .toggle-wrap{display:flex;align-items:center;gap:12px;margin:18px 0;font-size:14px;font-weight:600}
-  .switch{position:relative;width:56px;height:28px;background:#ccc;border-radius:999px;cursor:pointer;transition:.3s}
-  .switch.on{background:var(--verde)}
-  .switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;
-                 border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.3)}
-  .switch.on::after{left:31px}
+        .menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--black);
+            transition: 0.3s;
+        }
 
-  .btn{display:inline-block;background:var(--verde);color:#fff;border:none;padding:13px 28px;
-       border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;transition:.2s}
-  .btn:hover{background:var(--verde-osc)}
-  .btn.oro{background:var(--oro);color:var(--verde-osc)}
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            background: var(--white);
+            position: relative;
+        }
 
-  footer{background:var(--verde-osc);color:#cfe3db;padding:36px 60px;margin-left:0;font-size:13px}
-  footer b{color:var(--oro)}
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(200,200,200,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(180,180,180,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
 
-  .nota{background:#fdf7e4;border-left:5px solid var(--oro);padding:14px 18px;border-radius:8px;
-        font-size:14px;margin:18px 0}
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
 
-  @media(max-width:900px){
-    nav{display:none} main{margin-left:0} section,header.hero,footer{padding-left:24px;padding-right:24px}
-  }
-</style>
+        .hero-eyebrow {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 600;
+            line-height: 1.1;
+            color: var(--black);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--stone);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.9rem 2.2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--graphite);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--black);
+            border: 1.5px solid var(--black);
+        }
+
+        .btn-outline:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--silver);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-eyebrow {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 600;
+            color: var(--black);
+            line-height: 1.2;
+        }
+
+        /* Services */
+        .services {
+            background: var(--cloud);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 2.5rem 2rem;
+            border: 1px solid var(--mist);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--black);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+        }
+
+        .service-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--pearl);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.3px;
+        }
+
+        .service-card p {
+            font-size: 0.9rem;
+            color: var(--slate);
+            line-height: 1.6;
+        }
+
+        /* Methodology */
+        .methodology {
+            background: var(--white);
+        }
+
+        .methodology-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--mist);
+            align-items: flex-start;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--pearl);
+            min-width: 50px;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .step-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 0.4rem;
+        }
+
+        .step-content p {
+            font-size: 0.9rem;
+            color: var(--slate);
+        }
+
+        /* About */
+        .about {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .about .section-eyebrow {
+            color: var(--silver);
+        }
+
+        .about .section-title {
+            color: var(--white);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .about-text p {
+            font-size: 1rem;
+            color: var(--pearl);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .about-text strong {
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        .about-highlight {
+            border-left: 2px solid var(--white);
+            padding-left: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .about-highlight p {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--white);
+            line-height: 1.5;
+        }
+
+        .about-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-display {
+            width: 220px;
+            height: 220px;
+            border: 2px solid var(--graphite);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo-display::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 1px solid var(--graphite);
+        }
+
+        .logo-letters {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        .logo-letters span {
+            display: inline-block;
+        }
+
+        .logo-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--white);
+            margin: 0.5rem 0;
+        }
+
+        .logo-name {
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--silver);
+        }
+
+        .logo-tagline {
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-top: 2px;
+        }
+
+        /* Links / Hub */
+        .links-hub {
+            background: var(--cloud);
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .link-card {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            border: 1px solid var(--mist);
+            transition: all 0.3s ease;
+        }
+
+        .link-card:hover {
+            border-color: var(--black);
+            transform: translateX(4px);
+        }
+
+        .link-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .link-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .link-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        .link-url {
+            font-size: 0.75rem;
+            color: var(--silver);
+            margin-top: 2px;
+        }
+
+        /* Contact */
+        .contact {
+            background: var(--white);
+            text-align: center;
+        }
+
+        .contact-box {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 3rem;
+            border: 1px solid var(--mist);
+            background: var(--cloud);
+        }
+
+        .contact-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--black);
+        }
+
+        .contact-box p {
+            color: var(--slate);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--stone);
+        }
+
+        .contact-item a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .contact-item a:hover {
+            border-bottom-color: var(--black);
+        }
+
+        .social-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-btn {
+            width: 44px;
+            height: 44px;
+            border: 1.5px solid var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--silver);
+            text-align: center;
+            padding: 2.5rem 2rem;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        footer strong {
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                padding: 1.5rem 2rem;
+                gap: 1.2rem;
+                border-bottom: 1px solid var(--mist);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero {
+                padding: 7rem 1.5rem 3rem;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .step {
+                gap: 1rem;
+            }
+
+            .contact-box {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* Fade in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+<base target="_blank">
 </head>
 <body>
 
-<div id="progreso"></div>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo-text">
+                APATHEIA
+                <span>Growth Partner</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#metodologia">Metodología</a></li>
+                <li><a href="#sobre-mi">Sobre mí</a></li>
+                <li><a href="#enlaces">Enlaces</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-<nav>
-  <div class="marca">
-    <small>Four Research × VeneGlobal</small>
-    <h2>LOMAS DEL ENCUENTRO</h2>
-  </div>
-  <div class="rev">📋 Revisión <b>2 de 3</b> — pendiente de aprobación</div>
-  <a href="#resumen" class="activo">Resumen Ejecutivo</a>
-  <a href="#legal">1. Estructura Legal</a>
-  <a href="#remuneracion">2. Modelo de Remuneración</a>
-  <a href="#escrow">3. Control de Caja (Escrow)</a>
-  <a href="#alcance">4. Alcance de la Gestión</a>
-  <a href="#blindaje">5. Blindaje y Salida</a>
-  <a href="#gobernanza">6. Gobernanza</a>
-  <a href="#riesgos">7. Gestión de Riesgos</a>
-  <a href="#implementacion">8. Implementación (90 días)</a>
-  <a href="#valor">9. Propuesta de Valor</a>
-  <a href="#wargaming">War Gaming (Objeciones)</a>
-  <a href="#reglas">Reglas de Oro</a>
-</nav>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-eyebrow">Orlando Suárez</p>
+            <h1>Análisis Estratégico para <em>Decisiones de Negocio</em></h1>
+            <p class="hero-subtitle">
+                Transformo datos complejos en decisiones ejecutivas. Investigación sectorial, 
+                inteligencia de negocios e informes técnicos diseñados a medida.
+            </p>
+            <div class="hero-cta">
+                <a href="#servicios" class="btn btn-primary">Ver servicios</a>
+                <a href="#contacto" class="btn btn-outline">Agendar conversación</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <svg width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M8 4v12M4 14l4 4 4-4"/>
+            </svg>
+        </div>
+    </section>
 
-<main>
+    <!-- Services -->
+    <section class="services" id="servicios">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-eyebrow">Servicios</p>
+                <h2 class="section-title">Soluciones diseñadas para <em>resultados medibles</em></h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-number">01</div>
+                    <h3>Diagnóstico Express</h3>
+                    <p>Análisis rápido y focalizado de un problema, normativa o sector específico. Ideal para decisiones urgentes con alto impacto.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-number">02</div>
+                    <h3>Informe Técnico Sectorial</h3>
+                    <p>Investigación profunda con benchmarking competitivo, análisis de datos y propuestas de acción fundamentadas.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-number">03</div>
+                    <h3>Presentación Ejecutiva Estratégica</h3>
+                    <p>Síntesis de datos complejos en formatos claros y persuasivos para stakeholders, directorios y equipos de decisión.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-number">04</div>
+                    <h3>Retainer Mensual</h3>
+                    <p>Acompañamiento continuo con investigación bajo demanda. Un socio estratégico integrado a su operación.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<header class="hero" id="top">
-  <div class="kicker">Framework de Alianza Estratégica · Modelo de Operador Independiente</div>
-  <h1>Conjunto Integral Ecológico<br>"Lomas del Encuentro"</h1>
-  <h3>Mandato mercantil de gestión administrativa y comercialización exclusiva</h3>
-  <div class="chips">
-    <div class="chip">Terreno: <b>33,62 ha</b> · Pele el Ojo, Edo. Anzoátegui</div>
-    <div class="chip">Valoración del activo: <b>$10,17 M</b></div>
-    <div class="chip">Contrato: <b>20 años</b></div>
-    <div class="chip">Ingresos proyectados (6 años): <b>$29,37 M</b></div>
-  </div>
-</header>
+    <!-- Methodology -->
+    <section class="methodology" id="metodologia">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-eyebrow">Metodología</p>
+                <h2 class="section-title">Un proceso claro, <em>de principio a fin</em></h2>
+            </div>
+            <div class="methodology-steps">
+                <div class="step fade-in">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Briefing inicial</h3>
+                        <p>Definimos el problema, el alcance y los entregables esperados. Cada proyecto comienza con una comprensión profunda de sus objetivos.</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Investigación y análisis</h3>
+                        <p>Recolección de datos, benchmarking sectorial, modelado y análisis riguroso con fuentes confiables.</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Entrega preliminar</h3>
+                        <p>Borrador para su revisión y ajustes. Su retroalimentación es clave para refinar el producto final.</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>Entrega final</h3>
+                        <p>Documento o presentación final en el formato acordado, listo para su uso ejecutivo o institucional.</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">05</div>
+                    <div class="step-content">
+                        <h3>Seguimiento</h3>
+                        <p>Llamada de cierre para responder dudas y ajustar si es necesario. Su éxito es la métrica que importa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- ============ RESUMEN ============ -->
-<section id="resumen">
-  <h2>Resumen Ejecutivo</h2>
-  <p class="sub">La propuesta en una idea: control total del flujo de dinero sin asumir la carga legal del activo.</p>
-  <div class="card-grid">
-    <div class="card"><div class="num">🏛️</div><div class="lbl">VeneGlobal</div>
-      <p>Propietaria del activo (terreno valorado en $10,17 M), responsable legal y ejecutora de obras.</p></div>
-    <div class="card"><div class="num">⚙️</div><div class="lbl">Operador (Four Research)</div>
-      <p>Gestor administrativo y comercial exclusivo. Control de caja, facturación y CRM. Inversión inicial $400K–$500K.</p></div>
-    <div class="card"><div class="num">🏦</div><div class="lbl">Banco Fiduciario</div>
-      <p>Fiduciario de la cuenta Escrow. Ejecuta la distribución automática e irrevocable de fondos.</p></div>
-  </div>
-  <h4>Los 5 pilares del modelo</h4>
-  <div class="card-grid">
-    <div class="card"><b>💰 Control financiero</b><p>Cuenta Escrow con distribución automática, CRM centralizado y facturación exclusiva.</p></div>
-    <div class="card"><b>📈 Control comercial</b><p>Precios, ventas, marketing y atención al cliente bajo gestión exclusiva del Operador.</p></div>
-    <div class="card"><b>🛡️ Protección legal</b><p>Mandato mercantil, NO sociedad. Responsabilidad separada, sin solidaridad.</p></div>
-    <div class="card"><b>✅ Remuneración segura</b><p>Porcentaje sobre ingresos brutos, cobro automático en 24 horas.</p></div>
-    <div class="card"><b>🚪 Salida limpia</b><p>Terminación por causa justa, indemnización preestablecida, transición de 90 días.</p></div>
-  </div>
-  <div class="nota">🔑 <b>Alineación total de intereses:</b> ambos ganan si hay ventas, ninguno gana si no hay ventas.</div>
-</section>
+    <!-- About -->
+    <section class="about" id="sobre-mi">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-eyebrow">Sobre mí</p>
+                <h2 class="section-title">Experiencia que <em>genera confianza</em></h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <p>
+                        Soy <strong>Orlando Suárez</strong>, ingeniero civil con maestría en gerencia empresarial 
+                        y Director Ejecutivo en <strong>Fedecámaras Anzoátegui</strong>.
+                    </p>
+                    <p>
+                        A lo largo de mi trayectoria he liderado investigaciones técnicas de alto impacto, 
+                        construido observatorios de estadísticas desde cero y escrito guías técnicas especializadas 
+                        que hoy son referencia en su campo.
+                    </p>
+                    <p>
+                        Mi modelo de investigación está diseñado para entregar análisis de alto impacto 
+                        en tiempos competitivos, sin sacrificar rigor ni profundidad.
+                    </p>
+                    <div class="about-highlight">
+                        <p>"No ofrezco servicios genéricos: diseño soluciones a medida para socios que buscan resultados medibles."</p>
+                    </div>
+                </div>
+                <div class="about-visual fade-in">
+                    <div class="logo-display">
+                        <div class="logo-letters">
+                            <span>O</span><span>S</span>
+                        </div>
+                        <div class="logo-divider"></div>
+                        <div class="logo-name">APATHEIA</div>
+                        <div class="logo-tagline">Growth Partner</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- ============ 1. LEGAL ============ -->
-<section id="legal">
-  <h2>1. Estructura Legal: Mandato Mercantil, No Sociedad</h2>
-  <p class="sub">Contrato de Prestación de Servicios de Gestión Administrativa y Comercialización Exclusiva. NO es sociedad mercantil, NO consorcio, NO joint venture.</p>
-  <div class="card-grid">
-    <div class="card"><div class="lbl">Mandante</div><b>VENEZOLANA GLOBAL DE SERVICIOS, C.A.</b>
-      <p>RIF J-298949422 · Propietaria del terreno de 33,62 ha (Sector Pele el Ojo, Vía Naricual, Municipio Simón Bolívar, Anzoátegui).</p></div>
-    <div class="card"><div class="lbl">Mandatario / Operador</div><b>FOUR RESEARCH</b>
-      <p>Especializada en gestión, administración y comercialización de proyectos.</p></div>
-  </div>
-  <h4>Principios fundamentales</h4>
-  <table>
-    <tr><th>Principio</th><th>Detalle</th></tr>
-    <tr><td><b>Titularidad del activo</b></td><td>100% de VeneGlobal: terreno, construcciones, permisos, licencias y responsabilidad legal.</td></tr>
-    <tr><td><b>Rol del Operador</b></td><td>Proveedor externo e independiente. No figura en permisos de construcción, licencias sanitarias ni demandas ambientales.</td></tr>
-    <tr><td><b>Duración</b></td><td>20 años, irrevocable por parte del Mandante salvo incumplimiento grave del Operador.</td></tr>
-    <tr><td><b>Exclusividad</b></td><td>Absoluta sobre la gestión administrativa, financiera y comercial durante la vigencia.</td></tr>
-  </table>
-  <h4>Cláusulas de separación legal</h4>
-  <div class="card-grid">
-    <div class="card"><b>Independencia patrimonial</b><p>Ninguna parte responde por deudas, pasivos o demandas de la otra. Personalidad jurídica, contabilidad y fiscalidad separadas.</p></div>
-    <div class="card"><b>Blindaje reputacional</b><p>El Operador opera bajo su propia marca como "Gestor Administrativo y Comercial Exclusivo". Cláusula de no asociación.</p></div>
-    <div class="card"><b>No solidaridad</b><p>Sin relación de sociedad, consorcio ni joint venture. El Operador actúa como tercero independiente con mandato específico.</p></div>
-  </div>
-</section>
+    <!-- Links Hub -->
+    <section class="links-hub" id="enlaces">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-eyebrow">Contenido & Recursos</p>
+                <h2 class="section-title">Explora mis <em>canales digitales</em></h2>
+            </div>
+            <div class="links-grid">
+                <a href="https://www.canva.com/design/DAFS9oVB3l0/C-ebS_kJWcDb4vFJr8R56g/view?website#4:portada" target="_blank" rel="noopener" class="link-card fade-in">
+                    <div class="link-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <div class="link-info">
+                        <span class="link-name">Brief Profesional</span>
+                        <span class="link-url">canva.com · Portafolio completo</span>
+                    </div>
+                </a>
+                <a href="https://apatheia73.blogspot.com/" target="_blank" rel="noopener" class="link-card fade-in">
+                    <div class="link-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
+                    <div class="link-info">
+                        <span class="link-name">Blog</span>
+                        <span class="link-url">apatheia73.blogspot.com</span>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/channel/UCSj_YxYEmzrqsLop5_XZeQA" target="_blank" rel="noopener" class="link-card fade-in">
+                    <div class="link-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    </div>
+                    <div class="link-info">
+                        <span class="link-name">Blog en Audio</span>
+                        <span class="link-url">youtube.com · Podcast</span>
+                    </div>
+                </a>
+                <a href="https://www.instagram.com/apatheia73" target="_blank" rel="noopener" class="link-card fade-in">
+                    <div class="link-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </div>
+                    <div class="link-info">
+                        <span class="link-name">Instagram</span>
+                        <span class="link-url">@apatheia73</span>
+                    </div>
+                </a>
+                <a href="https://x.com/apatheia73" target="_blank" rel="noopener" class="link-card fade-in">
+                    <div class="link-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733-16z"/><path d="M4 20l6.768-6.768m2.46-2.46l6.772-6.772"/></svg>
+                    </div>
+                    <div class="link-info">
+                        <span class="link-name">X (Twitter)</span>
+                        <span class="link-url">@apatheia73</span>
+                    </div>
+                </a>
+                <a href="http://wa.me/+584265831648" target="_blank" rel="noopener" class="link-card fade-in">
+                    <div class="link-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    </div>
+                    <div class="link-info">
+                        <span class="link-name">WhatsApp</span>
+                        <span class="link-url">+58 426 5831648</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
 
-<!-- ============ 2. REMUNERACIÓN ============ -->
-<section id="remuneracion">
-  <h2>2. Modelo de Remuneración: Porcentaje sobre Ingresos Brutos</h2>
-  <div class="nota">⚠️ <b>NUNCA se acepta porcentaje sobre utilidades.</b> Las utilidades son manipulables mediante costos inflados. Se cobra sobre Ingresos Brutos Recaudados, verificables en tiempo real.</div>
-  <table>
-    <tr><th>Concepto</th><th>%</th><th>Base de cálculo</th><th>Frecuencia</th></tr>
-    <tr><td>Comisión Comercial (parcelas, nichos, mausoleos, cenizarios)</td><td><b>20%</b></td><td>Precio de venta bruto (sin descuentos)</td><td>Mensual, ≤5 días hábiles</td></tr>
-    <tr><td>Comisión Servicios (capilla, cremación, funerarios, hospedaje, locales)</td><td><b>15%</b></td><td>Ingreso bruto facturado</td><td>Mensual</td></tr>
-    <tr><td>Gestión Administrativa</td><td><b>7%</b></td><td>Recaudación total mensual</td><td>Mensual</td></tr>
-    <tr><td>Membresías y Planes Prepagados</td><td><b>18%</b></td><td>Monto cobrado al cliente</td><td>Mensual</td></tr>
-    <tr><td>Bono por Superávit de Meta</td><td><b>+5%</b></td><td>Excedente de la meta trimestral</td><td>Trimestral</td></tr>
-  </table>
+    <!-- Contact -->
+    <section class="contact" id="contacto">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-eyebrow">Contacto</p>
+                <h2 class="section-title">Conversemos <em>25 minutos</em></h2>
+            </div>
+            <div class="contact-box fade-in">
+                <h3>Agenda una conversación exploratoria</h3>
+                <p>Si considera que nuestro enfoque puede aportar valor a su organización, será un honor evaluar juntos cómo podemos acompañar su crecimiento.</p>
+                <div class="contact-methods">
+                    <div class="contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <a href="mailto:apatheia73@outlook.com">apatheia73@outlook.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        <a href="http://wa.me/+584265831648" target="_blank">+58 426 5831648</a>
+                    </div>
+                </div>
+                <a href="http://wa.me/+584265831648" target="_blank" class="btn btn-primary">Escríbeme por WhatsApp</a>
+                <div class="social-row">
+                    <a href="https://www.instagram.com/apatheia73" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </a>
+                    <a href="https://x.com/apatheia73" target="_blank" rel="noopener" class="social-btn" aria-label="X">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733-16z"/><path d="M4 20l6.768-6.768m2.46-2.46l6.772-6.772"/></svg>
+                    </a>
+                    <a href="https://www.youtube.com/channel/UCSj_YxYEmzrqsLop5_XZeQA" target="_blank" rel="noopener" class="social-btn" aria-label="YouTube">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                    </a>
+                    <a href="https://apatheia73.blogspot.com/" target="_blank" rel="noopener" class="social-btn" aria-label="Blog">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <h4>Proyección de ingresos del Operador (promedio 17%)</h4>
-  <div class="tabs">
-    <button class="tab-btn on" onclick="tab(event,'esp')">Escenario Esperado</button>
-    <button class="tab-btn" onclick="tab(event,'opt')">Optimista</button>
-    <button class="tab-btn" onclick="tab(event,'pes')">Pesimista</button>
-  </div>
-  <div class="tab-panel on" id="esp">
-    <div class="gran">$4.992.467,44</div>
-    <p>Ingresos del Operador en 6 años, sobre una recaudación total de <b>$29.367.455,60</b>.</p>
-    <div id="barras-esp"></div>
-  </div>
-  <div class="tab-panel" id="opt">
-    <div class="gran">≈ $6.781.007,26</div>
-    <p>Sobre ingresos totales de <b>$39.888.278,00</b> en 6 años.</p>
-  </div>
-  <div class="tab-panel" id="pes">
-    <div class="gran">≈ $2.590.835,70</div>
-    <p>Sobre ingresos totales de <b>$15.240.210,00</b> en 6 años.</p>
-  </div>
+    <!-- Footer -->
+    <footer>
+        <p><strong>APATHEIA</strong> | Growth Partner · Orlando Suárez</p>
+        <p style="margin-top: 0.5rem; opacity: 0.6;">Análisis estratégico para decisiones de negocio</p>
+    </footer>
 
-  <h4>Reglas de cobro</h4>
-  <div class="card-grid">
-    <div class="card"><b>Sobre brutos, no netos</b><p>Sin deducción de costos, impuestos ni gastos operativos.</p></div>
-    <div class="card"><b>Sobre lo cobrado</b><p>No sobre lo facturado. Si el cliente no paga, no hay comisión.</p></div>
-    <div class="card"><b>Sobre precio de lista</b><p>Si VeneGlobal ofrece descuentos, la comisión se calcula sobre el precio original.</p></div>
-    <div class="card"><b>Derecho de auditoría</b><p>Trimestral. Discrepancia &gt;2%: VeneGlobal paga la auditoría + multa del 200% del monto desviado.</p></div>
-  </div>
-</section>
+    <script>
+        // Mobile menu toggle
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
 
-<!-- ============ 3. ESCROW ============ -->
-<section id="escrow">
-  <h2>3. Control Absoluto de la Caja: Cuenta Escrow</h2>
-  <p class="sub">Este es el corazón del blindaje. Sin esto, el modelo no funciona.</p>
-  <div class="flujo">
-    <div class="paso"><b>CLIENTE PAGA</b><small>Transferencia, punto de venta, efectivo, cheque</small></div>
-    <div class="flecha">▼</div>
-    <div class="paso clave"><b>CUENTA ESCROW</b><small>Única cuenta de recaudación del proyecto · Banco de primer nivel · Fideicomiso</small></div>
-    <div class="flecha">▼</div>
-    <div class="paso"><b>SISTEMA AUTOMÁTICO DEL BANCO</b><small>Instrucción irrevocable firmada por VeneGlobal (no modificable sin autorización escrita del Operador)</small></div>
-    <div class="flecha">▼</div>
-    <div class="paso clave"><b>DISTRIBUCIÓN AUTOMÁTICA EN 24 HORAS</b><small>Partes de VeneGlobal, Operador y fondos de mantenimiento</small></div>
-  </div>
-  <div class="regla-oro">🔒 <b>Regla de oro:</b> ningún dinero sale de la cuenta sin la firma del Operador. Mandato mancomunado: firma del Operador (obligatoria) + firma de VeneGlobal.</div>
+        // Close menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
 
-  <h4>Control del CRM y facturación</h4>
-  <div class="card-grid">
-    <div class="card"><b>CRM centralizado</b><p>Salesforce/HubSpot o similar. Todos los leads, cotizaciones, seguimientos y cierres se registran allí.</p></div>
-    <div class="card"><b>Facturación centralizada</b><p>El Operador emite todas las facturas. Sin factura del Operador, no hay venta válida.</p></div>
-    <div class="card"><b>Cero ventas "por debajo de la mesa"</b><p>Si una venta no aparece en el CRM, no existe. Auditoría permanente de inventario vs. registros.</p></div>
-  </div>
-  <h4>Reportes en tiempo real</h4>
-  <table>
-    <tr><th>Tipo</th><th>Contenido</th></tr>
-    <tr><td>Dashboard ejecutivo</td><td>Acceso web/móvil 24/7 con datos en tiempo real para ambas partes.</td></tr>
-    <tr><td>Reporte diario</td><td>Flujo de caja del día anterior, enviado automáticamente por email.</td></tr>
-    <tr><td>Reporte semanal</td><td>Consolidado de ventas, comisiones generadas, saldos de cuenta Escrow.</td></tr>
-    <tr><td>Reporte mensual</td><td>Estados financieros completos, auditoría interna, conciliaciones bancarias.</td></tr>
-  </table>
-</section>
+        // Fade in on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -40px 0px'
+        };
 
-<!-- ============ 4. ALCANCE ============ -->
-<section id="alcance">
-  <h2>4. Alcance de la Gestión del Operador</h2>
-  <h4>Departamento de Comercialización (control exclusivo)</h4>
-  <div class="card-grid">
-    <div class="card"><b>Portafolio de productos</b><p>4.260 parcelas (12.780 inhumaciones en 5 terrazas) · 7.860 cenizarios (786 estantes) · 24 mausoleos (216 nichos) · 4 hornos crematorios (96 cremaciones/día) · 5 capillas velatorias · 10 habitaciones · 10 locales comerciales.</p></div>
-    <div class="card"><b>Precios y canales</b><p>Estrategia value-based, segmentación económico/medio/premium. Venta directa, alianzas con funerarias, planes preneed.</p></div>
-    <div class="card"><b>Marketing</b><p>Branding del cementerio ecológico, campañas digitales y tradicionales, RR.PP. y manejo de crisis. Presupuesto: 5–7% de ingresos.</p></div>
-    <div class="card"><b>Post-venta</b><p>Venta consultiva (funeral planning), mantenimiento de parcelas/nichos, encuestas NPS, programas de membresía.</p></div>
-  </div>
-  <h4>Metas de venta (escenario esperado)</h4>
-  <table>
-    <tr><th>Año</th><th>Inhumaciones</th><th>Cremaciones</th><th>Servicios funerarios</th></tr>
-    <tr><td>Año 1</td><td>340</td><td>—</td><td>624</td></tr>
-    <tr><td>Año 2</td><td>400</td><td>1.008</td><td>990</td></tr>
-    <tr><td>Años 3–6</td><td colspan="3">Crecimiento sostenido según escenario esperado</td></tr>
-  </table>
-  <h4>Departamento de Administración y Finanzas (control exclusivo)</h4>
-  <div class="card-grid">
-    <div class="card"><b>Tesorería</b><p>Gestión del Escrow, pagos con doble firma, reporte semanal de caja, presupuesto rolling de 13 semanas.</p></div>
-    <div class="card"><b>Contabilidad</b><p>VEN-NIIF completa, control presupuestario (variaciones &gt;5% requieren justificación), EEFF mensuales.</p></div>
-    <div class="card"><b>Compras</b><p>Licitación para obras &gt;$100K, triple cotización para compras &gt;$10K, control de inventarios.</p></div>
-    <div class="card"><b>Control de obras</b><p>Cronogramas, avance físico vs. financiero, valorizaciones mensuales. La ejecución sigue siendo de VeneGlobal; el Operador supervisa y certifica.</p></div>
-  </div>
-</section>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
 
-<!-- ============ 5. BLINDAJE ============ -->
-<section id="blindaje">
-  <h2>5. Blindaje Reputacional y de Salida</h2>
-  <h4>Terminación por causa justa (Operador puede rescindir + indemnización de 6 meses de ingresos promedio)</h4>
-  <table>
-    <tr><th>#</th><th>Causa</th></tr>
-    <tr><td>1</td><td>Desvío de fondos: pagos fuera del Escrow o evasión del sistema de facturación.</td></tr>
-    <tr><td>2</td><td>Pérdida de permisos legales, sanitarios o ambientales por negligencia de VeneGlobal.</td></tr>
-    <tr><td>3</td><td>Escándalo público o ambiental que dañe la viabilidad comercial.</td></tr>
-    <tr><td>4</td><td>Incumplimiento de obligaciones de mantenimiento u operación.</td></tr>
-    <tr><td>5</td><td>Interferencia en la gestión: ventas directas sin pasar por el sistema del Operador.</td></tr>
-    <tr><td>6</td><td>Pasivos ocultos: deudas, demandas o gravámenes no declarados.</td></tr>
-  </table>
-  <div class="card-grid">
-    <div class="card"><b>Terminación sin causa (por VeneGlobal)</b><p>Indemnización de 24 meses de comisiones promedio + costos de desmontaje + no competencia de 3 años para contratar operador similar.</p></div>
-    <div class="card"><b>Salida limpia del Operador</b><p>Transición de 90 días remunerada. El Operador conserva la propiedad del CRM y los datos; VeneGlobal recibe licencia de uso por 12 meses.</p></div>
-    <div class="card"><b>No competencia del Operador</b><p>No puede desarrollar proyecto similar en radio de 50 km por 2 años (con indemnización completa como contraprestación).</p></div>
-    <div class="card"><b>Seguros a cargo de VeneGlobal</b><p>TRC ($15M), Responsabilidad Civil ($5M), seguro ambiental (crítico por derrames históricos en Pele el Ojo) y cumplimiento de obra.</p></div>
-  </div>
-</section>
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-<!-- ============ 6. GOBERNANZA ============ -->
-<section id="gobernanza">
-  <h2>6. Gobierno y Toma de Decisiones</h2>
-  <h4>Comité de Gestión (5 miembros)</h4>
-  <div class="card-grid">
-    <div class="card"><div class="num">2</div><div class="lbl">Representantes del Operador</div><p>Incluyendo el Director General.</p></div>
-    <div class="card"><div class="num">2</div><div class="lbl">Representantes de VeneGlobal</div><p>Designados por la directiva.</p></div>
-    <div class="card"><div class="num">1</div><div class="lbl">Independiente</div><p>Auditor externo, rotativo anual.</p></div>
-  </div>
-  <table>
-    <tr><th>Nivel de decisión</th><th>Monto</th><th>Quórum</th></tr>
-    <tr><td>Operativas</td><td>&lt; $50.000</td><td>Mayoría simple (3/5)</td></tr>
-    <tr><td>Estratégicas</td><td>$50.000 – $200.000</td><td>Mayoría calificada (4/5)</td></tr>
-    <tr><td>Críticas</td><td>&gt; $200.000</td><td>Unanimidad (5/5)</td></tr>
-  </table>
-  <h4>Derechos de veto</h4>
-  <table>
-    <tr><th>Veto del Operador</th><th>Veto de VeneGlobal</th></tr>
-    <tr><td>Modificaciones a precios de venta</td><td>Diseño arquitectónico o uso del terreno</td></tr>
-    <tr><td>Política de comisiones o descuentos</td><td>Gravámenes adicionales sobre la propiedad</td></tr>
-    <tr><td>Contratación de personal comercial</td><td>Contratación de deuda adicional</td></tr>
-    <tr><td>Modificaciones al CRM / facturación</td><td>Enajenación de activos &gt;$500.000</td></tr>
-    <tr><td>Apertura de nuevas cuentas bancarias</td><td>Cambios en la operación (horarios, servicios)</td></tr>
-    <tr><td>Cualquier decisión que afecte el flujo de caja</td><td>—</td></tr>
-  </table>
-</section>
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    </script>
 
-<!-- ============ 7. RIESGOS ============ -->
-<section id="riesgos">
-  <h2>7. Gestión de Riesgos Específicos</h2>
-  <table>
-    <tr><th>Riesgo</th><th>Prob.</th><th>Impacto</th><th>Mitigación</th><th>Responsable</th></tr>
-    <tr><td>Retrasos en permisos</td><td class="prob-Alta">Alta</td><td class="imp imp-Alto">Alto</td><td>Gestor dedicado, reuniones mensuales con Alcaldía</td><td>VeneGlobal</td></tr>
-    <tr><td>Contaminación ambiental (derrames petroleros históricos)</td><td class="prob-Media">Media</td><td class="imp imp-MuyAlto">Muy Alto</td><td>Estudio de suelos y aguas, contención, seguro ambiental</td><td>VeneGlobal</td></tr>
-    <tr><td>Rechazo comunitario</td><td class="prob-Media">Media</td><td class="imp imp-Alto">Alto</td><td>Responsabilidad social, empleo local (70%), reuniones vecinales</td><td>Operador</td></tr>
-    <tr><td>Competencia establecida (Municipal, CEMEPARCA)</td><td class="prob-Alta">Alta</td><td class="imp imp-Medio">Medio</td><td>Diferenciación por calidad, transparencia, precios visibles</td><td>Operador</td></tr>
-    <tr><td>Inseguridad en zona periurbana</td><td class="prob-Alta">Alta</td><td class="imp imp-Medio">Medio</td><td>Iluminación, control de accesos, vigilancia 24/7</td><td>VeneGlobal</td></tr>
-    <tr><td>Sensibilidad al precio (mercado venezolano)</td><td class="prob-Alta">Alta</td><td class="imp imp-Alto">Alto</td><td>Segmentación, planes a plazos, membresías</td><td>Operador</td></tr>
-    <tr><td>Inflación &gt;45% (BCV)</td><td class="prob-Alta">Alta</td><td class="imp imp-Alto">Alto</td><td>Precios en USD, ajuste trimestral</td><td>Operador</td></tr>
-    <tr><td>Desvío de ventas (fuera del sistema)</td><td class="prob-Media">Media</td><td class="imp imp-Alto">Alto</td><td>Escrow, CRM centralizado, auditorías trimestrales</td><td>Operador</td></tr>
-    <tr><td>Incumplimiento de mantenimiento de VeneGlobal</td><td class="prob-Media">Media</td><td class="imp imp-Alto">Alto</td><td>Cláusulas de terminación, retención de fondos</td><td>Operador</td></tr>
-  </table>
-  <h4>Plan de contingencia financiera (escenario pesimista: ingresos &lt; proyección)</h4>
-  <div class="timeline">
-    <div class="tl-item"><div class="fase">Mes 1–6</div><ul><li>Reducción de costos de marketing en 30%.</li><li>Enfoque en ventas de alto margen (mausoleos, parcelas premium).</li></ul></div>
-    <div class="tl-item"><div class="fase">Mes 7–12</div><ul><li>Renegociación de contratos con proveedores.</li><li>Búsqueda de alianzas con funerarias.</li></ul></div>
-    <div class="tl-item"><div class="fase">Mes 13–18</div><ul><li>Activación de planes prepagados y membresías para generar flujo anticipado.</li></ul></div>
-    <div class="tl-item"><div class="fase">Mes 19–24</div><ul><li>Si ingresos &lt;50% de proyección: activación de cláusula de terminación por causa justa.</li></ul></div>
-  </div>
-</section>
-
-<!-- ============ 8. IMPLEMENTACIÓN ============ -->
-<section id="implementacion">
-  <h2>8. Plan de Implementación — Primeros 90 Días</h2>
-  <div class="timeline">
-    <div class="tl-item"><div class="fase">Fase 1 · Días 1–30 · Formalización legal</div>
-      <ul><li>Firma del Contrato de Gestión y Comercialización Exclusiva.</li>
-      <li>Apertura de cuenta Escrow con instrucción irrevocable.</li>
-      <li>Implementación de CRM y facturación.</li>
-      <li>Contratación de pólizas y auditoría legal inicial del terreno.</li></ul></div>
-    <div class="tl-item"><div class="fase">Fase 2 · Días 31–60 · Estructura operativa</div>
-      <ul><li>Contratación de equipo comercial (5–10 vendedores).</li>
-      <li>Diseño del portafolio y fijación de precios.</li>
-      <li>Campaña de lanzamiento y capacitación de la fuerza de ventas.</li>
-      <li>Apertura de preventa de parcelas y servicios.</li></ul></div>
-    <div class="tl-item"><div class="fase">Fase 3 · Días 61–90 · Puesta en marcha</div>
-      <ul><li>Primera venta registrada en CRM.</li>
-      <li>Primer cobro distribuido vía Escrow.</li>
-      <li>Primer reporte financiero mensual y evaluación de los 90 días.</li></ul></div>
-  </div>
-  <h4>Cronograma resumido</h4>
-  <table>
-    <tr><th>Hito</th><th>Semana</th></tr>
-    <tr><td>Firma del contrato</td><td>1–2</td></tr>
-    <tr><td>Apertura de cuenta Escrow</td><td>3–4</td></tr>
-    <tr><td>CRM y facturación</td><td>5–6</td></tr>
-    <tr><td>Inicio de preventa</td><td>7–8</td></tr>
-    <tr class="destacado"><td>Primera venta y primer cobro distribuido</td><td>9–12</td></tr>
-  </table>
-  <div class="nota">Punto de equilibrio del Operador: <b>mes 6–9</b> (recuperación de la inversión inicial de $400K–$500K).</div>
-</section>
-
-<!-- ============ 9. PROPUESTA DE VALOR ============ -->
-<section id="valor">
-  <h2>9. Propuesta de Valor para VeneGlobal</h2>
-  <h4>¿Por qué VeneGlobal debería aceptar este modelo?</h4>
-  <div class="card-grid">
-    <div class="card"><b>No ponen capital de trabajo</b><p>El Operador pone la estructura comercial y administrativa ($400K–$500K). VeneGlobal solo pone el terreno ($10,17M).</p></div>
-    <div class="card"><b>Alineación total de intereses</b><p>El Operador solo gana si VeneGlobal vende. Incentivo 100% alineado.</p></div>
-    <div class="card"><b>Profesionalización sin costo fijo</b><p>Departamento de ventas y administración de primer nivel sin contratación interna.</p></div>
-    <div class="card"><b>Mayor credibilidad ante el banco</b><p>Un tercero serio controlando la caja facilita la aprobación del préstamo.</p></div>
-    <div class="card"><b>Mitigación de riesgos operativos</b><p>El Operador asume el riesgo comercial; VeneGlobal se concentra en el activo y lo legal.</p></div>
-  </div>
-
-  <h4>Comparación de modelos</h4>
-  <div class="toggle-wrap">
-    <span>Modelo de Sociedad</span>
-    <div class="switch on" id="sw" onclick="toggleComp()"></div>
-    <span style="color:var(--verde)">Modelo de Operador Independiente</span>
-  </div>
-  <table id="tabla-comp">
-    <tr><th>Aspecto</th><th id="colA">Modelo de Sociedad</th><th id="colB">Operador Independiente</th></tr>
-    <tr><td>Responsabilidad legal</td><td>Solidaria (ambos responden por todo)</td><td><b>Separada (cada uno responde por lo suyo)</b></td></tr>
-    <tr><td>Riesgo de contagio</td><td>Alto (deudas, demandas, ambiental)</td><td><b>Nulo (blindaje legal completo)</b></td></tr>
-    <tr><td>Control del dinero</td><td>Compartido (conflictos posibles)</td><td><b>Operador controla recaudación; VeneGlobal recibe su parte automáticamente</b></td></tr>
-    <tr><td>Remuneración</td><td>% sobre utilidades (manipulable)</td><td><b>% sobre ingresos brutos (verificable)</b></td></tr>
-    <tr><td>Salida</td><td>Compleja (disolución, venta de participación)</td><td><b>Limpia (terminación + 90 días de transición)</b></td></tr>
-    <tr><td>Inversión del Operador</td><td>Alta (capital de trabajo significativo)</td><td><b>Baja ($400K–$500K)</b></td></tr>
-    <tr><td>Retorno del Operador</td><td>Variable, dependiente de costos</td><td><b>Estable, predecible, basado en ventas</b></td></tr>
-    <tr><td>Alineación de intereses</td><td>Puede haber conflictos</td><td><b>Total (ambos ganan si hay ventas)</b></td></tr>
-  </table>
-</section>
-
-<!-- ============ WAR GAMING ============ -->
-<section id="wargaming">
-  <h2>Simulación de Negociación (War Gaming)</h2>
-  <p class="sub">Las 5 objeciones principales de VeneGlobal y cómo neutralizarlas sin ceder en los pilares (Escrow, ingresos brutos, control de facturación). Haz clic en cada una.</p>
-
-  <div class="obj">
-    <div class="obj-head" onclick="obj(this)">❓ "¿Por qué necesitamos una cuenta Escrow? Suena a desconfianza y a secuestro de nuestros ingresos." <span class="ico">▼</span></div>
-    <div class="obj-body"><p>No es desconfianza personal, es <b>gobernanza profesional</b>. Sin distribución automática, el proyecto se convierte en una caja negra donde los gastos se inflan y las comisiones se retrasan. El Escrow no secuestra el dinero: lo blinda. El banco ejecuta la instrucción irrevocable, no nosotros. Si el proyecto es sólido, el Escrow es una ventaja, no una amenaza.</p></div>
-  </div>
-  <div class="obj">
-    <div class="obj-head" onclick="obj(this)">❓ "20 años de contrato es una eternidad. Nos ata de manos." <span class="ico">▼</span></div>
-    <div class="obj-body"><p>Un cementerio es un negocio de ciclo largo: la recuperación de infraestructura y la consolidación de marca toman 5–7 años. Con 3–5 años, la lógica nos obligaría a extraer caja rápido en vez de construir valor. 20 años alinean el incentivo al largo plazo. Además, la "atadura" solo existe si el proyecto funciona: hay cláusulas de terminación a nuestro favor si ustedes incumplen.</p></div>
-  </div>
-  <div class="obj">
-    <div class="obj-head" onclick="obj(this)">❓ "Es nuestra empresa y nuestro terreno. Nosotros deberíamos facturar." <span class="ico">▼</span></div>
-    <div class="obj-body"><p>Pueden ser los titulares fiscales, con una condición innegociable: <b>la emisión de facturas debe salir exclusivamente del sistema CRM/ERP administrado por nosotros</b>. Facturar por su cuenta abre la puerta a ventas no registradas, descuentos no autorizados y manipulación de la base de comisiones. No queremos ser sus contadores: queremos ser el candado que asegura que cada venta real se registre, se cobre y se distribuya.</p></div>
-  </div>
-  <div class="obj">
-    <div class="obj-head" onclick="obj(this)">❓ "Cobrar sobre ingresos brutos (20% + 15% + 7%) es excesivo. Cobren sobre utilidades o un fee fijo." <span class="ico">▼</span></div>
-    <div class="obj-body"><p>Cobrar sobre utilidades es receta para peleas constantes: se manipulan con costos corporativos, depreciaciones arbitrarias y gastos inflados. Nosotros ponemos capital humano, tecnología y estrategia. Si cobráramos sobre utilidades, pasaríamos el 80% del tiempo auditando sus gastos en lugar de vender parcelas. El % sobre ingreso bruto alinea intereses al 100%: si no vendemos, no cobramos. Es matemática pura, no codicia.</p></div>
-  </div>
-  <div class="obj">
-    <div class="obj-head" onclick="obj(this)">❓ "Si no son socios, ¿qué garantía hay de que no abandonarán el proyecto a la primera dificultad?" <span class="ico">▼</span></div>
-    <div class="obj-body"><p>Nuestra "piel en el juego" es la inversión inicial de $400K–$500K en estructura, tecnología y marketing, que solo recuperamos si el proyecto vende. Además: indemnización de 24 meses si nos despiden sin causa, y no competencia de 50 km por 2 años. No podemos irnos a la primera dificultad: perderíamos la inversión y enfrentaríamos penalidades. Nuestra única forma de ganar es que ustedes vendan más.</p></div>
-  </div>
-</section>
-
-<!-- ============ REGLAS ============ -->
-<section id="reglas">
-  <h2>Reglas de Oro para la Negociación</h2>
-  <div class="card-grid">
-    <div class="card" style="border-top:4px solid var(--rojo)"><b>1. No negociar el Escrow</b><p>Es la línea roja. Sin control de la recaudación, el contrato no se firma.</p></div>
-    <div class="card" style="border-top:4px solid var(--rojo)"><b>2. No negociar ingresos brutos</b><p>Es la única forma de evitar la manipulación contable.</p></div>
-    <div class="card" style="border-top:4px solid var(--oro)"><b>3. Flexibilidad condicionada</b><p>Si bajan de 20 a 10 años, la indemnización por despido injustificado sube de 24 a 36 meses.</p></div>
-    <div class="card" style="border-top:4px solid var(--verde)"><b>4. Mantener la calma</b><p>Las objeciones son esperadas: son señales de que evalúan el límite de tu postura. Argumentar con lógica de negocio, no emoción.</p></div>
-  </div>
-  <div style="margin-top:36px;text-align:center">
-    <a class="btn oro" href="#top">⬆ Volver al inicio</a>
-    <a class="btn" href="javascript:window.print()">🖨 Imprimir / Guardar PDF</a>
-  </div>
-</section>
-
-</main>
-
-<footer>
-  <b>LOMAS DEL ENCUENTRO</b> — Framework de Alianza Estratégica · Revisión 2 de 3 ·
-  VeneGlobal (Mandante) × Four Research (Operador) ·
-  Proyecto: Conjunto Integral Ecológico, Sector Pele el Ojo, Barcelona, Edo. Anzoátegui.
-</footer>
-
-<script>
-// Barra de progreso
-window.addEventListener('scroll',()=>{
-  const h=document.documentElement;
-  const pct=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
-  document.getElementById('progreso').style.width=pct+'%';
-});
-
-// Nav activo por scroll
-const links=[...document.querySelectorAll('nav a')];
-const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
-window.addEventListener('scroll',()=>{
-  let idx=0;
-  secs.forEach((s,i)=>{if(s&&window.scrollY>=s.offsetTop-140)idx=i;});
-  links.forEach((a,i)=>a.classList.toggle('activo',i===idx));
-});
-
-// Tabs de escenarios
-function tab(e,id){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
-  e.currentTarget.classList.add('on');
-  document.getElementById(id).classList.add('on');
-}
-
-// Acordeón de objeciones
-function obj(head){head.parentElement.classList.toggle('abierta');}
-
-// Toggle comparativa (resalta la columna recomendada)
-function toggleComp(){
-  const sw=document.getElementById('sw');sw.classList.toggle('on');
-  const b=document.querySelectorAll('#tabla-comp td:nth-child(3), #tabla-comp th:nth-child(3)');
-  const a=document.querySelectorAll('#tabla-comp td:nth-child(2), #tabla-comp th:nth-child(2)');
-  const on=sw.classList.contains('on');
-  b.forEach(c=>c.style.background=on?'var(--verde-claro)':'');
-  a.forEach(c=>c.style.background=on?'':'var(--verde-claro)');
-}
-
-// Barras animadas del escenario esperado
-const datos=[
-  ['Año 1',1359240,231070.80],['Año 2',3649627.60,620436.69],
-  ['Año 3',4426815.20,752558.58],['Año 4',5874920.00,998736.40],
-  ['Año 5',6804837.60,1156822.39],['Año 6',7252015.20,1232842.58]];
-const max=7252015.20, wrap=document.getElementById('barras-esp');
-datos.forEach(d=>{
-  wrap.insertAdjacentHTML('beforeend',
-  `<div class="barra-wrap"><div class="barra-lbl"><span>${d[0]}</span>
-   <span>Proyecto: $${d[1].toLocaleString('es-VE')} · Operador: $${d[2].toLocaleString('es-VE')}</span></div>
-   <div class="barra"><i data-w="${d[1]/max*100}"></i></div></div>`);
-});
-setTimeout(()=>document.querySelectorAll('.barra i').forEach(i=>i.style.width=i.dataset.w+'%'),400);
-</script>
 </body>
 </html>
