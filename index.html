@@ -722,7 +722,67 @@
             opacity: 1;
             transform: translateY(0);
         }
-    </style>
+    
+        /* Statement / Manifiesto */
+        .statement {
+            background: var(--black);
+            padding: 7rem 2rem;
+            text-align: center;
+        }
+
+        .statement-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .statement-line {
+            width: 60px;
+            height: 2px;
+            background: var(--white);
+            margin: 0 auto;
+        }
+
+        .statement-content blockquote {
+            margin: 3rem 0;
+            border: none;
+            padding: 0;
+        }
+
+        .statement-part-1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 4vw, 2.6rem);
+            font-weight: 400;
+            color: var(--white);
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .statement-part-2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-weight: 400;
+            color: var(--pearl);
+            line-height: 1.5;
+            letter-spacing: 0.3px;
+        }
+
+        .statement-part-2 em {
+            font-style: italic;
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .statement {
+                padding: 4rem 1.5rem;
+            }
+            .statement-content blockquote {
+                margin: 2rem 0;
+            }
+        }
+
+</style>
 <base target="_blank">
 </head>
 <body>
@@ -771,7 +831,21 @@
         </div>
     </section>
 
-    <!-- Services -->
+        <!-- Statement / Manifiesto -->
+    <section class="statement">
+        <div class="container">
+            <div class="statement-content fade-in">
+                <div class="statement-line"></div>
+                <blockquote>
+                    <p class="statement-part-1">Las grandes decisiones requieren datos claros.</p>
+                    <p class="statement-part-2">Si tu empresa no está midiendo sus resultados, <em>estás operando a ciegas.</em></p>
+                </blockquote>
+                <div class="statement-line"></div>
+            </div>
+        </div>
+    </section>
+
+<!-- Services -->
     <section class="services" id="servicios">
         <div class="container">
             <div class="section-header fade-in">
